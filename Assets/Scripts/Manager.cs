@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.Serialization;
-using Image = UnityEngine.UIElements.Image;
+
 
 public class Manager : MonoBehaviour
 {
@@ -25,6 +23,8 @@ public class Manager : MonoBehaviour
     private int levelIncrement;
     public Transform spawnPosition;
     public bool IsDead => currentEnemy.health <= 0;
+
+    public Image imageOnScene;
 
     private void Start()
     {
@@ -51,7 +51,7 @@ public class Manager : MonoBehaviour
             {
                 levelIncrement++;
                 Money += 20f;
-                Debug.Log("money on dead" + Money);
+                
                 levelText.text = $"Niveau: {levelIncrement}";
                 spawnEnemy();
             }
@@ -62,9 +62,9 @@ public class Manager : MonoBehaviour
     {
         Vector3 specificPosition = new Vector3(1f, 2f, 3f);
         currentEnemy = Instantiate(enemiesPrefab, spawnPosition.position, Quaternion.identity);
-        currentEnemy.transform.localScale = specificPosition;
+       // currentEnemy.transform.localScale = specificPosition;
         currentEnemy.Init(30);
-        currentEnemy.GetComponents<Image>();
+        currentEnemy.image = imageOnScene;
     }
 
     public void AutoClickUpdate(){
