@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.Serialization;
+using Image = UnityEngine.UIElements.Image;
 
 public class Manager : MonoBehaviour
 {
@@ -19,7 +21,15 @@ public class Manager : MonoBehaviour
     public float TotalMoney;
     public Enemies enemiesPrefab;
     public Enemies currentEnemy;
+    public TMP_Text levelText;
+    private int levelIncrement;
+    public Transform spawnPosition;
     public bool IsDead => currentEnemy.health <= 0;
+
+    private void Start()
+    {
+        
+    }
 
     public void AddClicks(){
 
@@ -39,6 +49,10 @@ public class Manager : MonoBehaviour
             currentEnemy.TakeDamage(10);
             if (currentEnemy.IsDead)
             {
+                levelIncrement++;
+                Money += 20f;
+                Debug.Log("money on dead" + Money);
+                levelText.text = $"Niveau: {levelIncrement}";
                 spawnEnemy();
             }
         }
@@ -46,11 +60,11 @@ public class Manager : MonoBehaviour
 
     void spawnEnemy()
     {
-    
-
-        currentEnemy = Instantiate(enemiesPrefab, Vector3.zero, Quaternion.identity);
-        
+        Vector3 specificPosition = new Vector3(1f, 2f, 3f);
+        currentEnemy = Instantiate(enemiesPrefab, spawnPosition.position, Quaternion.identity);
+        currentEnemy.transform.localScale = specificPosition;
         currentEnemy.Init(30);
+        currentEnemy.GetComponents<Image>();
     }
 
     public void AutoClickUpdate(){
@@ -73,13 +87,15 @@ public class Manager : MonoBehaviour
         }
         ClicksTotalText.text = $"Clicks: " + TotalClicks.ToString();
         Moneytext.text = $"Argent: " + Money.ToString();
+        levelText.text = $"Niveau: {levelIncrement}";
 
         if(hasUpgraded){
             TotalClicks += autoClicksPerSecond * Time.deltaTime;
             TotalMoney+= autoClicksPerSecond * Time.deltaTime;
             ClicksTotalText.text = TotalClicks.ToString("0");
             Moneytext.text = TotalMoney.ToString("0");
-
+            currentEnemy.TakeDamage(30);
+            
         }
     }
 
