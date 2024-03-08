@@ -16,7 +16,7 @@ public class Manager : MonoBehaviour
     public bool hasUpgraded;
     public float TotalClicks;
     public int autoClicksPerSecond;
-    public int minimumClicksToUnlockUpgrade;
+    public int minimumMoneyToUnlockUpgrade;
     public float Money;
     public TMP_Text Moneytext;
     public float TotalMoney;
@@ -77,13 +77,14 @@ public class Manager : MonoBehaviour
         currentEnemy.image = imageOnScene;
     }
 
-    
-    
-    public void AutoClickUpdate(){
-        if(!hasUpgraded && TotalClicks >= minimumClicksToUnlockUpgrade){
-            TotalClicks = minimumClicksToUnlockUpgrade;
-            TotalMoney = minimumClicksToUnlockUpgrade;
+      private void AutoClickUpdate(){
+        minimumMoneyToUnlockUpgrade = 30;
+         if(!hasUpgraded && Money >= minimumMoneyToUnlockUpgrade){
+            Debug.Log("Upgrade autoclick ");
+            //TotalClicks = 5;
+            Money -= minimumMoneyToUnlockUpgrade;
             hasUpgraded = true;
+            
         } 
     }    
 
@@ -102,11 +103,14 @@ public class Manager : MonoBehaviour
         levelText.text = $"Niveau: {levelIncrement}";
 
         if(hasUpgraded){
+            //autoClicksPerSecond = 3;
+            Debug.Log("Upgrade if update  ");
             TotalClicks += autoClicksPerSecond * Time.deltaTime;
-            TotalMoney+= autoClicksPerSecond * Time.deltaTime;
+            //TotalMoney+= autoClicksPerSecond * Time.deltaTime;
             ClicksTotalText.text = TotalClicks.ToString("0");
-            Moneytext.text = TotalMoney.ToString("0");
-            currentEnemy.TakeDamage(30);
+            Moneytext.text = Money.ToString("0");
+            currentEnemy.TakeDamage(10);
+            hasUpgraded = false;
             
         }
     }

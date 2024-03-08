@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonDown(2) && GameObject.FindGameObjectWithTag("enemies"))
         {
             TakeDamage(10);
-            Debug.Log(health);
+           // Debug.Log(health);
         }
         //image.fillAmount = health / maxHealth;
     }
