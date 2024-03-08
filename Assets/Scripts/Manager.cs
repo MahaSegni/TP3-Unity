@@ -76,15 +76,20 @@ public class Manager : MonoBehaviour
         currentEnemy.Init(30);
         currentEnemy.image = imageOnScene;
     }
-
-      private void AutoClickUpdate(){
+IEnumerator Wait() {
+	yield return new WaitForSeconds (3);
+	
+}
+      public void AutoClickUpdate(){
         minimumMoneyToUnlockUpgrade = 30;
-         if(!hasUpgraded && Money >= minimumMoneyToUnlockUpgrade){
-            Debug.Log("Upgrade autoclick ");
+        if (currentEnemy != null)
+        {
+         if(!hasUpgraded && Money >= minimumMoneyToUnlockUpgrade && currentEnemy.health>10){
             //TotalClicks = 5;
             Money -= minimumMoneyToUnlockUpgrade;
             hasUpgraded = true;
-            
+          
+         }
         } 
     }    
 
@@ -102,17 +107,18 @@ public class Manager : MonoBehaviour
         Moneytext.text = $"Argent: " + Money.ToString();
         levelText.text = $"Niveau: {levelIncrement}";
 
-        if(hasUpgraded){
+        if(hasUpgraded && currentEnemy.health>10){
             //autoClicksPerSecond = 3;
-            Debug.Log("Upgrade if update  ");
             TotalClicks += autoClicksPerSecond * Time.deltaTime;
             //TotalMoney+= autoClicksPerSecond * Time.deltaTime;
             ClicksTotalText.text = TotalClicks.ToString("0");
             Moneytext.text = Money.ToString("0");
+             Wait();
             currentEnemy.TakeDamage(10);
             hasUpgraded = false;
             
         }
+        
     }
 
     private void Save()
