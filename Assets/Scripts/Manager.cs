@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 
 public class Manager : MonoBehaviour
@@ -25,6 +28,7 @@ public class Manager : MonoBehaviour
     public bool IsDead => currentEnemy.health <= 0;
 
     public Image imageOnScene;
+    public int counterSpawn;
 
     private void Start()
     {
@@ -50,23 +54,31 @@ public class Manager : MonoBehaviour
             if (currentEnemy.IsDead)
             {
                 levelIncrement++;
+                counterSpawn++;
                 Money += 20f;
                 
                 levelText.text = $"Niveau: {levelIncrement}";
-                spawnEnemy();
+                Vector3 spawnPos = new Vector3(10, 10, 10);
+                spawnEnemy(spawnPos);
+          
             }
         }
     }
 
-    void spawnEnemy()
+    void spawnEnemy(Vector3 size)
     {
-        Vector3 specificPosition = new Vector3(1f, 2f, 3f);
-        currentEnemy = Instantiate(enemiesPrefab, spawnPosition.position, Quaternion.identity);
-       // currentEnemy.transform.localScale = specificPosition;
+
+        Vector3 specificPosition = new Vector3(8, 8, 8);
+        if(counterSpawn >= 5 ) return;
+        
+        currentEnemy = Instantiate(enemiesPrefab, new Vector3(377,13,80), Quaternion.identity);
+        currentEnemy.transform.localScale = size;
         currentEnemy.Init(30);
         currentEnemy.image = imageOnScene;
     }
 
+    
+    
     public void AutoClickUpdate(){
         if(!hasUpgraded && TotalClicks >= minimumClicksToUnlockUpgrade){
             TotalClicks = minimumClicksToUnlockUpgrade;
